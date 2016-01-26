@@ -16,7 +16,7 @@ angular.module('puploadAngularApp')
      runtimes : 'html5,flash,silverlight,html4',
      browse_button : 'pickfiles', // you can pass an id...
      container: document.getElementById('container'), // ... or DOM Element itself
-     url : 'http://localhost/upload.php',
+     url : 'http://localhost/uploads/upload.php',
      flash_swf_url : '../js/Moxie.swf',
      silverlight_xap_url : '../js/Moxie.xap',
 
@@ -29,6 +29,9 @@ angular.module('puploadAngularApp')
          {title : "Zip files", extensions : "avi,mp4,wmv,zip"},
          {title : "PDF files", extensions : "pdf"}
        ]
+     },
+     headers: {
+         'Access-Control-Allow-Origin' : 'http://localhost:9000/'
      },
 
      init: {
@@ -55,11 +58,14 @@ angular.module('puploadAngularApp')
        },
 
        UploadProgress: function(up, file) {
-         document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+         $scope.progressFile = file.percent;
+         //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
        },
 
        Error: function(up, err) {
-         document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+         console.log("Error #" + err.code + ": " + err.message);
+         console.log(err);
+         //document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
        }
      }
    });
