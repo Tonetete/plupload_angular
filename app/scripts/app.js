@@ -10,23 +10,17 @@
  */
 angular
   .module('puploadAngularApp', [
-    'ngAnimate',
-    'ngCookies',
     'ngResource',
-    'ngRoute',
-    'ngSanitize'
+    'ngRoute'
   ])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
+        templateUrl: 'views/filesupload.html',
+        controller: 'FilesuploadCtrl', // If you define here the controller, its not necessary call it in the view.
+                                       // If you define both sides cause the controller call twice, so take it in mind!
+                                       // http://stackoverflow.com/questions/14442954/angularjs-controller-is-called-twice-by-using-routeprovider
+        controllerAs: 'filesUpload'
       })
       .otherwise({
         redirectTo: '/'
