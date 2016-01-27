@@ -11,7 +11,7 @@ angular.module('puploadAngularApp')
   .controller('FilesuploadCtrl', ['$scope', function ($scope) {
     $scope.showProgress = false; // show progres bar
     $scope.filesUploads = [];
-
+    $scope.idx = 0; // for indexing the files
     $scope.uploader = new plupload.Uploader({
      runtimes : 'html5,flash,silverlight,html4',
      browse_button : 'pickfiles', // you can pass an id...
@@ -20,7 +20,7 @@ angular.module('puploadAngularApp')
      flash_swf_url : '../plupload/Moxie.swf',
      silverlight_xap_url : '../plupload/Moxie.xap',
 
-     chunk_size: '50000kb',
+     //chunk_size: '50000kb',
 
      filters : {
        max_file_size : '10000mb',
@@ -40,28 +40,36 @@ angular.module('puploadAngularApp')
          //document.getElementById('filelist').innerHTML = '';
          $scope.uploadFiles = function(){
            $scope.uploader.start();
-           //$scope.showProgress=true;
            return false;
          };
        },
 
        FilesAdded: function(up, files) {
          plupload.each(files, function(file) {
-           //file.size = plupload.formatSize(file.size); ----> CULPABLE!!!!!!!
+           file.formatSize = plupload.formatSize(file.size);
+           file.progress = 0;
+           file.idx = $scope.idx;
+           file.showProgress = false;
+           file.processingFile = false;
            $scope.filesUploads.push(file);
+           $scope.idx++;
            $scope.$apply(); // probably plupload is blocking the scope apply event so we have to aply ourselves.
            console.log(file);
-           //document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
          });
        },
 
+       BeforeUpload: function(up, file) {
+         file.showProgress = true;
+       },
+
        UploadProgress: function(up, file) {
-         //$scope.progressFile = file.percent;
-         console.log(file.percent);
-         $scope.progressFile = (file.loaded / file.origSize) * 100;
+         $scope.filesUploads[file.idx].progressFile = file.percent;
+         file.processingFile = false;
          $scope.$apply();
-         //console.log("progress: "+$scope.progressFile);
-         //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+       },
+
+       FileUploaded: function(up, file, response) {
+         console.log("File uploaded: "+file.name);
        },
 
        Error: function(up, err) {
@@ -72,4 +80,16 @@ angular.module('puploadAngularApp')
    });
 
    $scope.uploader.init();
+
+   // function for search a file in json array by its id
+   $scope.findFile = function(id) {
+        var i = 0;
+        angular.forEach($scope.filesUploads, function(value) {
+            if (value.id === id)
+              return i;
+            else
+              i++;
+        });
+    };
+
   }]);
