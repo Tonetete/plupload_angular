@@ -46,6 +46,7 @@ angular.module('puploadAngularApp')
 
        FilesAdded: function(up, files) {
          plupload.each(files, function(file) {
+           var filecito = file.getSource();
            file.formatSize = plupload.formatSize(file.size);
            file.progress = 0;
            file.idx = $scope.idx;
@@ -54,7 +55,29 @@ angular.module('puploadAngularApp')
            $scope.filesUploads.push(file);
            $scope.idx++;
            $scope.$apply(); // probably plupload is blocking the scope apply event so we have to aply ourselves.
-           console.log(file);
+           //console.log(file);
+
+           // Set preview image
+           var img = new mOxie.Image();
+        		img.onload = function() {
+                this.embed($('#preview-'+file.id).get(0), {
+                  width: 150,
+                  height: 150,
+                  crop: true
+                });
+        		};
+        		img.onembedded = function() {
+        			this.destroy();
+        		};
+        		img.onerror = function() {
+        			this.destroy();
+        		};
+            if(file.type === 'image/jpeg' || file.type === 'image/png'){
+                img.load(file.getSource());
+            }
+            else{
+              $('#preview-'+file.id).prepend('<span style="font-size: 150px; color: #fff;"><i class="glyphicon glyphicon-file"></i></span>')
+            }
          });
        },
 

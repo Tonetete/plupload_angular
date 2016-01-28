@@ -14,30 +14,60 @@
           </button>
       </div>
       <div class="row">
-        <video id="videoId" width="100%" controls>
+        <!--<video id="videoId" width="100%" controls>
           <source src="http://localhost/uploads/files/Game.of.Thrones.S05E10.1080p.HDTV.DD5.1.x264-SNEAkY.mkv" type="video/mp4">
 
         Your browser does not support the video tag.
-        </video>
+      </video>-->
       </div>
+
       <div class="row">
+         <div class="col-xs-12">
            <ul id="filelist" class="list-unstyled">
              <li ng-repeat="f in filesUploads">
+
+               <div class="media">
+                <div class="media-left">
+                  <div class="media-object" id="preview-{{f.id}}"></div>
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading info-file">{{ f.name }}</h4>
+                  <h5>File size: <b>{{ f.formatSize }}</b></h5>
+                  <h5>File type: <b>{{ f.type }}</b></h5>
+                  <div ng-show="f.showProgress" class="progress progress-striped active">
+                     <div class="progress-bar progress-bar-custom" role="progressbar" style="width: {{f.progressFile}}%;">
+                         <span class="sr-only">{{f.progressFile}}%</span>
+                     </div>
+                 </div>
+                </div>
+              </div>
+               <!--
+               <div id="preview-{{f.id}}"></div>
                <div class="row">
                  <div class="col-xs-6 info-file">
                    <i class="glyphicon glyphicon-file"></i>
                      <span>{{ f.name }} - (<b>{{ f.formatSize }}</b>)</span>
                  </div>
                  <div class="col-xs-6">
-                   <div ng-show="f.showProgress" class="progress">
-                     <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" style="width: {{f.progressFile}}%">
-                       <span class="sr-only">{{f.progressFile}}%</span>
+                   <div class="row">
+                     <div class="col-xs-11">
+                       <div ng-show="f.showProgress" class="progress progress-striped active">
+                          <div class="progress-bar progress-bar-custom" role="progressbar" style="width: {{f.progressFile}}%;">
+                              <span class="sr-only">{{f.progressFile}}%</span>
+                          </div>
+                      </div>
                      </div>
-                   </div>
+                    <div class="col-xs-1">
+                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                    </div>
+                  </div>
                  </div>
                </div>
+             -->
              </li>
            </ul>
+         </div>
+
       </div>
     </div>
    <br>
