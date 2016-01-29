@@ -5,27 +5,20 @@
   <div class="row marketing">
 
     <div id="container">
-      <div id="upload-form" class="row">
-          <button type="button" id="pickfiles" class="btn btn-success">
-            Browse File
-          </button>
-          <button type="button" ng-click="uploadFiles()" id="uploadfiles" class="btn btn-warning">
-            Start Upload
-          </button>
-      </div>
       <div class="row">
-        <!--<video id="videoId" width="100%" controls>
-          <source src="http://localhost/uploads/files/Game.of.Thrones.S05E10.1080p.HDTV.DD5.1.x264-SNEAkY.mkv" type="video/mp4">
-
-        Your browser does not support the video tag.
-      </video>-->
+        <div id="upload-form" class="row">
+            <button type="button" id="pickfiles" class="btn btn-success">
+              Browse File
+            </button>
+            <button type="button" ng-click="uploadFiles()" id="uploadfiles" class="btn btn-warning">
+              Start Upload
+            </button>
+        </div>
       </div>
-
       <div class="row">
          <div class="col-xs-12">
            <ul id="filelist" class="list-unstyled">
              <li ng-repeat="f in filesUploads">
-
                <div class="media">
                 <div class="media-left">
                   <div class="media-object" id="preview-{{f.id}}"></div>
@@ -41,68 +34,33 @@
                  </div>
                 </div>
               </div>
-               <!--
-               <div id="preview-{{f.id}}"></div>
-               <div class="row">
-                 <div class="col-xs-6 info-file">
-                   <i class="glyphicon glyphicon-file"></i>
-                     <span>{{ f.name }} - (<b>{{ f.formatSize }}</b>)</span>
-                 </div>
-                 <div class="col-xs-6">
-                   <div class="row">
-                     <div class="col-xs-11">
-                       <div ng-show="f.showProgress" class="progress progress-striped active">
-                          <div class="progress-bar progress-bar-custom" role="progressbar" style="width: {{f.progressFile}}%;">
-                              <span class="sr-only">{{f.progressFile}}%</span>
-                          </div>
-                      </div>
-                     </div>
-                    <div class="col-xs-1">
-                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-                    </div>
-                  </div>
-                 </div>
-               </div>
-             -->
              </li>
            </ul>
          </div>
-
       </div>
     </div>
    <br>
 
     <div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading"><h4>Files uploads</h4></div>
-    <div class="panel-body">
-      <p>All files uploaded will appear here dinamically.</p>
-    </div>
+      <!-- Default panel contents -->
+      <div class="panel-heading"><h4>Files uploads</h4></div>
+      <div class="panel-body">
+        <p>All files uploaded will appear here dinamically.</p>
+      </div>
 
-    <!-- Table -->
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Preview</th>
-          <th>Name</th>
-          <th>Size</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+      <!-- Table -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Preview</th>
+            <th>Name</th>
+            <th>Size</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
   </div>
-    <p>
-      HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-    </p>
 
-    <h4>Angular</h4>
-    <p>
-      AngularJS is a toolset for building the framework most suited to your application development.
-    </p>
-
-    <h4>Karma</h4>
-    <p>Spectacular Test Runner for JavaScript.</p>
-  </div>
 
 </div>

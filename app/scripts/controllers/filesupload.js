@@ -9,14 +9,12 @@
  */
 angular.module('puploadAngularApp')
   .controller('FilesuploadCtrl', ['$scope', function ($scope) {
-    $scope.showProgress = false; // show progres bar
     $scope.filesUploads = [];
-    $scope.idx = 0; // for indexing the files
     $scope.uploader = new plupload.Uploader({
      runtimes : 'html5,flash,silverlight,html4',
      browse_button : 'pickfiles', // you can pass an id...
      container: document.getElementById('container'), // ... or DOM Element itself
-     url : 'http://localhost/uploads/upload.php',
+     url : 'example.php',
      flash_swf_url : '../plupload/Moxie.swf',
      silverlight_xap_url : '../plupload/Moxie.xap',
 
@@ -37,7 +35,6 @@ angular.module('puploadAngularApp')
 
      init: {
        PostInit: function() {
-         //document.getElementById('filelist').innerHTML = '';
          $scope.uploadFiles = function(){
            $scope.uploader.start();
            return false;
@@ -46,16 +43,12 @@ angular.module('puploadAngularApp')
 
        FilesAdded: function(up, files) {
          plupload.each(files, function(file) {
-           var filecito = file.getSource();
            file.formatSize = plupload.formatSize(file.size);
            file.progress = 0;
-           file.idx = $scope.idx;
            file.showProgress = false;
            file.processingFile = false;
            $scope.filesUploads.push(file);
-           $scope.idx++;
            $scope.$apply(); // probably plupload is blocking the scope apply event so we have to aply ourselves.
-           //console.log(file);
 
            // Set preview image
            var img = new mOxie.Image();
@@ -86,33 +79,27 @@ angular.module('puploadAngularApp')
        },
 
        UploadProgress: function(up, file) {
-         $scope.filesUploads[file.idx].progressFile = file.percent;
+         file.progressFile = file.percent;
          file.processingFile = false;
          $scope.$apply();
        },
 
        FileUploaded: function(up, file, response) {
          console.log("File uploaded: "+file.name);
+         console.log("Response from the server: "+response.response+ " with status: "+ response.status);
+         console.log("Response headers: "+response.responseHeaders);
        },
 
        Error: function(up, err) {
-         console.log("Error #" + err.code + ": " + err.message);
-         //document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+         console.log("Error Plupload code#" + err.code + ": " + err.message);
+         console.log("Error with file: "+err.file.name);
+         console.log("Response from the server: "+err.response+" with status: "+err.status);
+         console.log("Response headers: "+err.responseHeaders);
        }
      }
    });
 
    $scope.uploader.init();
 
-   // function for search a file in json array by its id
-   $scope.findFile = function(id) {
-        var i = 0;
-        angular.forEach($scope.filesUploads, function(value) {
-            if (value.id === id)
-              return i;
-            else
-              i++;
-        });
-    };
 
   }]);
