@@ -27,11 +27,16 @@
                   <h4 class="media-heading info-file">{{ f.name }}</h4>
                   <h5>File size: <b>{{ f.formatSize }}</b></h5>
                   <h5>File type: <b>{{ f.type }}</b></h5>
-                  <div ng-show="f.showProgress" class="progress progress-striped active">
+
+                  <div ng-show="f.showError" class="alert alert-danger fade in">
+                   <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                   <strong>Error!</strong> {{f.error}}<br>
+                  </div>
+                  <div ng-show="f.showProgress && !f.showError" class="progress progress-striped active">
                      <div class="progress-bar progress-bar-custom" role="progressbar" style="width: {{f.progressFile}}%;">
                          <span class="sr-only">{{f.progressFile}}%</span>
                      </div>
-                 </div>
+                  </div>
                 </div>
               </div>
              </li>

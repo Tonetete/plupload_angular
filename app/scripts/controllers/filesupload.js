@@ -14,7 +14,7 @@ angular.module('puploadAngularApp')
      runtimes : 'html5,flash,silverlight,html4',
      browse_button : 'pickfiles', // you can pass an id...
      container: document.getElementById('container'), // ... or DOM Element itself
-     url : 'example.php',
+     url : 'http://localhost/uploads/upload.php',
      flash_swf_url : '../plupload/Moxie.swf',
      silverlight_xap_url : '../plupload/Moxie.xap',
 
@@ -46,6 +46,7 @@ angular.module('puploadAngularApp')
            file.formatSize = plupload.formatSize(file.size);
            file.progress = 0;
            file.showProgress = false;
+           file.showError = false;
            file.processingFile = false;
            $scope.filesUploads.push(file);
            $scope.$apply(); // probably plupload is blocking the scope apply event so we have to aply ourselves.
@@ -76,6 +77,7 @@ angular.module('puploadAngularApp')
 
        BeforeUpload: function(up, file) {
          file.showProgress = true;
+         file.showError = false;
        },
 
        UploadProgress: function(up, file) {
@@ -91,6 +93,11 @@ angular.module('puploadAngularApp')
        },
 
        Error: function(up, err) {
+         err.file.error = err.response+" with status: "+err.status;
+         err.file.showError = true;
+         err.file.showProgress = false;
+         $scope.$apply();
+         console.log(err.file.name+" showError: "+err.file.showError);
          console.log("Error Plupload code#" + err.code + ": " + err.message);
          console.log("Error with file: "+err.file.name);
          console.log("Response from the server: "+err.response+" with status: "+err.status);
