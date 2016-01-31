@@ -1,71 +1,93 @@
+<style media="screen">
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+</style>
 <div class="container">
-  <div class="jumbotron">
-    <h1>File uploader with AngularJS and Plupload</h1>
-  </div>
-  <div class="row marketing">
 
-    <div id="container">
-      <div class="row">
-        <div id="upload-form" class="row">
-            <button type="button" id="pickfiles" class="btn btn-success">
-              Browse File
-            </button>
-            <button type="button" ng-click="uploadFiles()" id="uploadfiles" class="btn btn-warning">
-              Start Upload
-            </button>
-        </div>
-      </div>
-      <div class="row">
-         <div class="col-xs-12">
-           <ul id="filelist" class="list-unstyled">
-             <li ng-repeat="f in filesUploads">
-               <div class="media">
-                <div class="media-left">
-                  <div class="media-object" id="preview-{{f.id}}"></div>
-                </div>
-                <div class="media-body">
-                  <h4 class="media-heading info-file">{{ f.name }}</h4>
-                  <h5>File size: <b>{{ f.formatSize }}</b></h5>
-                  <h5>File type: <b>{{ f.type }}</b></h5>
+  <div class="col-xs-12">
+    <div class="row marketing">
+      <div id="container">
 
-                  <div ng-show="f.showError" class="alert alert-danger fade in">
-                   <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                   <strong>Error!</strong> {{f.error}}<br>
-                  </div>
-                  <div ng-show="f.showProgress && !f.showError" class="progress progress-striped active">
-                     <div class="progress-bar progress-bar-custom" role="progressbar" style="width: {{f.progressFile}}%;">
-                         <span class="sr-only">{{f.progressFile}}%</span>
-                     </div>
-                  </div>
+        <div class="row">
+          <div class="col-xs-10">
+            <div class="panel panel-default">
+              <div class="panel-heading"><h4>Form file upload</h4></div>
+              <div class="panel-body">
+                <p>Browse for files you want upload to. Only jpg and png files will show a preview, otherwise a glyphicon file will show instead.</p>
+                <div id="upload-form" class="row">
+                    <button type="button" id="pickfiles" class="btn btn-success">
+                      Browse File
+                    </button>
+                    <button type="button" ng-click="uploadFiles()" id="uploadfiles" class="btn btn-warning">
+                      Start Upload
+                    </button>
+
+                    <ul id="filelist" class="list-unstyled">
+                      <li ng-repeat="f in filesUploads">
+                        <div class="media">
+                         <div class="media-left">
+                           <div class="media-object" id="preview-{{f.id}}"></div>
+                         </div>
+                         <div class="media-body">
+                           <h4 class="media-heading info-file">{{ f.name }}</h4>
+                           <h5>File size: <b>{{ f.formatSize }}</b></h5>
+                           <h5>File type: <b>{{ f.type }}</b></h5>
+
+                           <div ng-show="f.showError" class="alert alert-danger fade in">
+                            <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>Error!</strong> {{f.error}}<br>
+                           </div>
+                             <div class="row">
+                               <div class="col-xs-10">
+                                 <div ng-show="f.showProgress && !f.showError" class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-custom" role="progressbar" style="width: {{f.progressFile}}%;">
+                                        <span class="sr-only">{{f.progressFile}}%</span>
+                                    </div>
+                                 </div>
+                               </div>
+                               <div class="col-xs-2">
+                                 <span ng-show="f.processingFile" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                                 <span ng-show="f.complete" class="glyphicon glyphicon glyphicon-ok"></span>
+                               </div>
+                             </div>
+                         </div>
+                       </div>
+                      </li>
+                    </ul>
                 </div>
               </div>
-             </li>
-           </ul>
-         </div>
-      </div>
-    </div>
-   <br>
+            </div>
+          </div>
+        <div class="row">
+           <div class="col-xs-12">
 
-    <div class="panel panel-default">
-      <!-- Default panel contents -->
-      <div class="panel-heading"><h4>Files uploads</h4></div>
-      <div class="panel-body">
-        <p>All files uploaded will appear here dinamically.</p>
+           </div>
+        </div>
       </div>
+     <br>
 
-      <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Preview</th>
-            <th>Name</th>
-            <th>Size</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+      <!--<div class="panel panel-default">
+        <div class="panel-heading"><h4>Files uploads</h4></div>
+        <div class="panel-body">
+          <p>All files uploaded will appear here dinamically.</p>
+        </div>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Preview</th>
+              <th>Name</th>
+              <th>Size</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+    </div>-->
+
   </div>
-
 
 </div>

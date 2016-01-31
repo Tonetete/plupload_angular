@@ -14,7 +14,7 @@ angular.module('puploadAngularApp')
      runtimes : 'html5,flash,silverlight,html4',
      browse_button : 'pickfiles', // you can pass an id...
      container: document.getElementById('container'), // ... or DOM Element itself
-     url : 'http://localhost/uploads/upload.php',
+     url : 'upload.php',
      flash_swf_url : '../plupload/Moxie.swf',
      silverlight_xap_url : '../plupload/Moxie.xap',
 
@@ -48,6 +48,7 @@ angular.module('puploadAngularApp')
            file.showProgress = false;
            file.showError = false;
            file.processingFile = false;
+           file.complete = false;
            $scope.filesUploads.push(file);
            $scope.$apply(); // probably plupload is blocking the scope apply event so we have to aply ourselves.
 
@@ -55,8 +56,8 @@ angular.module('puploadAngularApp')
            var img = new mOxie.Image();
         		img.onload = function() {
                 this.embed($('#preview-'+file.id).get(0), {
-                  width: 150,
-                  height: 150,
+                  width: 100,
+                  height: 100,
                   crop: true
                 });
         		};
@@ -70,7 +71,7 @@ angular.module('puploadAngularApp')
                 img.load(file.getSource());
             }
             else{
-              $('#preview-'+file.id).prepend('<span style="font-size: 150px; color: #fff;"><i class="glyphicon glyphicon-file"></i></span>')
+              $('#preview-'+file.id).prepend('<span style="font-size: 100px; color: #fff;"><i class="glyphicon glyphicon-file"></i></span>');
             }
          });
        },
@@ -83,6 +84,9 @@ angular.module('puploadAngularApp')
        UploadProgress: function(up, file) {
          file.progressFile = file.percent;
          file.processingFile = false;
+         if(file.percent === 100){
+           file.processingFile = true;
+         }
          $scope.$apply();
        },
 
@@ -90,12 +94,17 @@ angular.module('puploadAngularApp')
          console.log("File uploaded: "+file.name);
          console.log("Response from the server: "+response.response+ " with status: "+ response.status);
          console.log("Response headers: "+response.responseHeaders);
+         file.processingFile = false;
+         file.complete = true;
+         $scope.$apply();
        },
 
        Error: function(up, err) {
          err.file.error = err.response+" with status: "+err.status;
          err.file.showError = true;
          err.file.showProgress = false;
+         err.file.processingFile = false;
+         err.file.complete = false;
          $scope.$apply();
          console.log(err.file.name+" showError: "+err.file.showError);
          console.log("Error Plupload code#" + err.code + ": " + err.message);

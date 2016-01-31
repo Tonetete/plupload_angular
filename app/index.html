@@ -12,7 +12,9 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     <!-- endbuild -->
+    <link rel="stylesheet" href="styles/animations.css">
     <!-- build:css(.tmp) styles/main.css -->
+
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
@@ -34,22 +36,15 @@
               <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#/">puploadAngular</a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="js-navbar-collapse">
-
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#/">Home</a></li>
-            </ul>
+            <a class="navbar-brand" href="#/">File uploader with AngularJS and Plupload</a>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container">
-    <div ng-view=""></div>
-    </div>
+
+    <div id="wrapper" ng-view=""></div>
+
 
     <div class="footer">
       <div class="container">
