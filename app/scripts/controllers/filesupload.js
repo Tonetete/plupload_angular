@@ -8,13 +8,16 @@
  * Controller of the puploadAngularApp
  */
 angular.module('puploadAngularApp')
-  .controller('FilesuploadCtrl', ['$scope', function ($scope) {
+  .controller('FilesuploadCtrl', ['$scope', 'uploadFactory','$timeout',
+    function ($scope, uploadFactory, $timeout) {
     $scope.filesUploads = [];
+    $scope.filesUploaded = [];
+    $scope.succesUpdated = false;
     $scope.uploader = new plupload.Uploader({
      runtimes : 'html5,flash,silverlight,html4',
      browse_button : 'pickfiles', // you can pass an id...
      container: document.getElementById('container'), // ... or DOM Element itself
-     url : 'upload.php',
+     url : 'http://localhost/uploads/upload/',
      flash_swf_url : '../plupload/Moxie.swf',
      silverlight_xap_url : '../plupload/Moxie.xap',
 
@@ -91,11 +94,13 @@ angular.module('puploadAngularApp')
        },
 
        FileUploaded: function(up, file, response) {
+         response.response = $.parseJSON(response.response);
          console.log("File uploaded: "+file.name);
-         console.log("Response from the server: "+response.response+ " with status: "+ response.status);
+         console.log("Response from the server: "+response.message+ " with status: "+ response.status);
          console.log("Response headers: "+response.responseHeaders);
          file.processingFile = false;
          file.complete = true;
+         $scope.filesUploaded.push(response.response.row);
          $scope.$apply();
        },
 
@@ -115,7 +120,91 @@ angular.module('puploadAngularApp')
      }
    });
 
+   $scope.formatSize = function(size){
+     return plupload.formatSize(size);
+   }
+
+   /**
+    * @ngdoc function
+    * @name deleteFile
+    * @description
+    *
+    * Function to delete a file passing its id.
+    */
+
+   $scope.deleteFile = function(id1){
+
+    uploadFactory.getFiles().delete({id: id1})
+     .$promise.then(
+       function(response){
+         var index = $scope.filesUploaded.indexOfObject("_id",response.row._id);
+         $scope.filesUploaded.splice(index, 1);
+         console.log("delete success!");
+       },
+       function(error){
+         console.log("delete error! "+error);
+       }
+     );
+
+   }
+
+   Array.prototype.indexOfObject = function arrayObjectIndexOf(property, value) {
+    for (var i = 0, len = this.length; i < len; i++) {
+        if (this[i][property] === value) return i;
+     }
+     return -1;
+   }
+
+   /**
+    * @ngdoc function
+    * @name updateNameFile
+    * @description
+    *
+    * Function to update a file name passing its id.
+    */
+
+   $scope.updateNameFile = function(id, data){
+     uploadFactory.getFiles().update({id: id, name: data})
+      .$promise.then(
+        function(response){
+            console.log("update success!");
+            console.log(response);
+            $scope.succesUpdated = true;
+            var index = $scope.filesUploaded.indexOfObject("_id",id);
+            $scope.filesUploaded[index].succesUpdated = true;
+            $timeout(function(){
+              $scope.filesUploaded[index].succesUpdated = false;
+            }, 3000);
+        },
+        function(error){
+          console.log("update error! "+error);
+        });
+
+   };
+
+   /*$scope.updateNameFile = function(id, data){
+     var file = uploadFactory.getFiles().get({id: id});
+     file.name = data;
+     file.$update(); //PUT
+
+     $http.put("http://localhost/uploads/upload/"+id, data)
+        .success(function(res){
+            console.log("Got put method " + res);
+      });
+   }*/
+
    $scope.uploader.init();
 
+   // initial load
+   $scope.init = function(){
+     $scope.filesUploaded = uploadFactory.getFiles().query();
+   }
 
-  }]);
+   $scope.init();
+
+  }])
+  .filter('trusted', ['$sce', function ($sce) {
+    return function(url) {
+        return $sce.trustAsResourceUrl(url);
+    };
+  }]);;
