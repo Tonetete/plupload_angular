@@ -89,7 +89,7 @@ body {
 
 /******** CUSTOM CSS ************/
 
-#filelist > li {
+.filelist > li {
   border: 1px solid rgba(0, 0, 0, 0.25);
   margin: 10px;
   line-height: 30px;
@@ -99,7 +99,7 @@ body {
 
 }
 
-#filelist > li h4, #filelist > li h5{
+.filelist > li h4, .filelist > li h5{
   text-shadow: 1px 1px 0 #Fff;
   color: rgb(56, 57, 58);
 }

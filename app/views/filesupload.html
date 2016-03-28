@@ -10,7 +10,6 @@
   <div class="col-xs-12">
     <div class="row marketing">
       <div id="container">
-
         <div class="row">
           <div class="col-xs-10">
             <div class="panel panel-default">
@@ -25,7 +24,7 @@
                       Start Upload
                     </button>
 
-                    <ul id="filelist" class="list-unstyled">
+                    <ul class="filelist list-unstyled">
                       <li ng-repeat="f in filesUploads">
                         <div class="media">
                          <div class="media-left">
@@ -61,32 +60,47 @@
               </div>
             </div>
           </div>
+        </div>
         <div class="row">
-           <div class="col-xs-12">
+           <div class="col-xs-10">
+             <div class="panel panel-default">
+               <div class="panel-heading"><h4>Form files uploaded</h4></div>
+               <div class="panel-body">
+                 <p>Files uploaded will be shown below.</p>
+                     <ul class="filelist list-unstyled">
+                       <li ng-repeat="f in filesUploaded track by f._id">
+                         <div class="media">
+                          <div class="media-left">
+                            <a href="{{f.url}}">
+                              <img ng-if="f.type == 'image/png' || f.type == 'image/jpg'" class="media-object" width="100" height="100" src="{{f.url}}" alt="{{f.name}}">
+                              <video ng-if="f.type == 'video/mp4' || f.type == 'video/ogg' || f.type == 'video/avi' || f.type == 'video/mpg'"
+                               width="100" height="100" src="{{f.url}}" controls>
+                                <source ng-src="{{f.url}}" type="{{f.type}}"/>
+                              </video>
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <h4 class="media-heading info-file" onbeforesave="updateNameFile(f._id, $data)" editable-text="f.name">
+                              {{ f.name }}
+                            </h4>
+                            <h5>File size: <b>{{ formatSize(f.size) }}</b></h5>
+                            <h5>File type: <b>{{ f.type }}</b></h5>
 
+                            <div ng-show="f.succesUpdated" class="alert alert-success fade in">
+                             <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                             <strong>Success file name updated!</strong><br>
+                            </div>
+                            <button ng-click="deleteFile(f._id)" type="button" class="btn btn-danger" name="button">Delete</button>
+                          </div>
+                        </div>
+                       </li>
+                     </ul>
+               </div>
+             </div>
            </div>
         </div>
       </div>
      <br>
-
-      <!--<div class="panel panel-default">
-        <div class="panel-heading"><h4>Files uploads</h4></div>
-        <div class="panel-body">
-          <p>All files uploaded will appear here dinamically.</p>
-        </div>
-
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Preview</th>
-              <th>Name</th>
-              <th>Size</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-    </div>-->
 
   </div>
 
