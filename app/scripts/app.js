@@ -11,9 +11,10 @@
 angular
   .module('puploadAngularApp', [
     'ngResource',
-    'ngRoute'
+    'ngRoute',
+    'xeditable'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $sceProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/filesupload.html',
@@ -25,4 +26,5 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+    $sceProvider.enabled(false);
   });
