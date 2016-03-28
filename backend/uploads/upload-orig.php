@@ -15,7 +15,20 @@
 #!! revise it and customize to your needs.
 // Make sure file is not cached (as it happens for example on iOS devices)
 
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400');
+}
 
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+}
 
 /*header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -23,48 +36,20 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");*/
 
-
+/*
 // Support CORS
-/*header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *");
 // other CORS headers if any...
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 	exit; // finish preflight CORS requests here
-}*/
-
-
-/*header("Access-Control-Allow-Origin: *");
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Max-Age: 86400');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
-header('Cache-Control: no-cache');*/
-
-
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-	header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-	header('Access-Control-Allow-Credentials: true');
-	header('Access-Control-Max-Age: 86400');
-	header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
-	header('Cache-Control: no-cache');
 }
-
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-
-	if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])){
-		header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-	}
-
-
-	if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])){
-		header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-	}
-
-}
+*/
 
 // 5 minutes execution time
 @set_time_limit(5 * 60);
 
 // Uncomment this one to fake upload time
-//usleep(5000);
+// usleep(5000);
 
 // Settings
 $targetDir = "files"; //ini_get("upload_tmp_dir") . DIRECTORY_SEPARATOR . "plupload";

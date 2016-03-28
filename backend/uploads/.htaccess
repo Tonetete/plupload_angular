@@ -1,2 +1,7 @@
 
-# Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Origin "*"
+
+Options +FollowSymLinks
+RewriteEngine on
+RewriteRule ^upload/?$ rest_upload.php [L]
+RewriteRule ^upload/([^/.]+)/?$ rest_upload.php?id=$1 [L] # GET/UPDATE/DELETE certain file
