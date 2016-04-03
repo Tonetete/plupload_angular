@@ -67,13 +67,18 @@
                <div class="panel-heading"><h4>Form files uploaded</h4></div>
                <div class="panel-body">
                  <p>Files uploaded will be shown below.</p>
-                     <ul class="filelist list-unstyled">
+                 <div ng-if="notFilesUploaded" class="alert alert-warning fade in">
+                  <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>There's no files yet, just upload some files!</strong><br>
+                 </div>
+                     <ul ng-if="!notFilesUploaded" class="filelist list-unstyled">
                        <li ng-repeat="f in filesUploaded track by f._id">
                          <div class="media">
                           <div class="media-left">
                             <a href="{{f.url}}">
-                              <img ng-if="f.type == 'image/png' || f.type == 'image/jpg'" class="media-object" width="100" height="100" src="{{f.url}}" alt="{{f.name}}">
-                              <video ng-if="f.type == 'video/mp4' || f.type == 'video/ogg' || f.type == 'video/avi' || f.type == 'video/mpg'"
+                              <img ng-if="f.type == 'image/png' || f.type == 'image/jpg' || f.type == 'image/jpeg'" 
+                                class="media-object" width="100" height="100" src="{{f.url}}" alt="{{f.name}}">
+                              <video ng-if="f.type == 'video/mp4' || f.type == 'video/ogg' || f.type == 'video/avi' || f.type == 'video/mpg' || f.type == 'video/x-matroska'"
                                width="100" height="100" src="{{f.url}}" controls>
                                 <source ng-src="{{f.url}}" type="{{f.type}}"/>
                               </video>

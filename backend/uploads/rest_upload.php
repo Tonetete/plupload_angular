@@ -8,11 +8,18 @@
 
 require_once('mongo-connection.php');
 
+// Turning OFF php report, comment below to debug purposes.
+error_reporting(0);
+@ini_set('display_errors', 0);
 
-if (isset($_SERVER['HTTP_ORIGIN'])) {
+if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] == 'http://localhost:9000') {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400');
+}
+
+else{
+    return;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -30,7 +37,7 @@ header("Content-Type: application/json");
 
 
 // Set target dir
-$target_dir = "/var/www/uploads/files/";
+$target_dir = "/Users/Tone/www/uploads/files/";
 
 //Set connection
 $connection = new MongoConnection();
@@ -63,18 +70,11 @@ function getRequest(){
     if(isset($_GET['id'])){
         $row = $connection->queryOperationById($_GET['id']);
         if(isset($row)){
-            $response['status'] = 200;
-            $response['message'] = "Get file ".$row->name." OK";
-            header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-            echo json_encode($row);
-            return;
+            $response['row'] = $row;
+            return send_response(200,$response,"Get file ".$row->name." OK");
         }
         else{
-            $response['status'] = 404;
-            $response['message'] = "Get file with id ".$_GET['id']." NOT FOUND";
-            header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-            echo json_encode($response);
-            return;
+            return send_response(404,$response,"Get file with id ".$_GET['id']." NOT FOUND");
         }
 
     }
@@ -82,18 +82,11 @@ function getRequest(){
     else{
         $rows = $connection->queryOperation();
         if(isset($rows)){
-            $response['status'] = 200;
-            $response['message'] = " GET rows files OK";
-            header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-            echo json_encode($rows);
-            return;
+            $response['rows'] = $rows;
+            return send_response(200,$response," GET rows files OK");
         }
         else{
-            $response['status'] = 404;
-            $response['message'] = " GET rows files NOT FOUND";
-            header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-            echo json_encode($response);
-            return;
+            return send_response(404,$response," GET rows files NOT FOUND");
         }
     }
 }
@@ -112,10 +105,16 @@ function updateRequest(){
         $row->url = $url . $row->name;
         if($connection->updateOperation($row) > 0){
             rename($target_dir.$rowOld->name, $target_dir.$row->name);
-            return json_encode($row);
+            return send_response(200, $response, " UPDATE file ".$row->name." success!");
+        }
+        else{
+            return send_response(500, $response, "There was an error updating file ".$row->name);
         }
     }
-    return;
+    else{
+        return send_response(401, $response, "Bad request.");
+    }
+
 }
 
 function deleteRequest(){
@@ -133,36 +132,20 @@ function deleteRequest(){
                 if (file_exists($target_file)) {
                     unlink($target_file);
                 }
-                $response['status'] = 200;
-                $response['message'] = "File id: ".$row->_id." deleted OK";
                 $response['row'] = $row;
-                header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-                echo json_encode($response);
-                return;
+                return send_response(200, $response, "File id: ".$row->_id." deleted OK");
             }
             else{
-                $response['status'] = 500;
-                $response['message'] = "There was an error in server on DELETE file with id ".$_GET['id'];
-                header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-                echo json_encode($response);
-                return;
+                return send_response(500, $response, "There was an error in server on DELETE file ".$row->name);
             }
         }
         else{
-            $response['status'] = 404;
-            $response['message'] = "Cannot DELETE file with id ".$_GET['id']." NOT FOUND";
-            header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-            echo json_encode($response);
-            return;
+            return send_response(404, $response, "Cannot DELETE file with id ".$_GET['id']." NOT FOUND");
         }
 
     }
     else{
-        $response['status'] = 401;
-        $response['message'] = "Bad request";
-        header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-        echo json_encode($response);
-        return;
+        return send_response(401, $response, "Bad request.");
     }
 
 }
@@ -201,29 +184,25 @@ function postRequest(){
 
             // Search for the record
             $row = $connection->queryOperationById($datas[0]['_id']);
-            $response['status'] = 200;
-            $response['message'] = "Insert file ".$fileName." OK";
             $response['row'] = $row;
-            header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-            $result = json_encode($response);
-            echo $result;
-
-            return;
+            return send_response(200, $response, "Insert file ".$fileName." OK");
         }
         // There was an error inserting the records.
         else{
-            $response['status'] = 500;
-            $response['message'] = "There was an error inserting the file ".$fileName;
-            header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
-            $result = json_encode($response);
-
-            echo $result;
-            return;
+            return send_response(500, $response, "There was an error inserting the file ".$fileName);
         }
 
     } else {
-        echo "Error uploading file!\n";
+        return send_response(500, $response, "There was an error uploading the file.");
     }
 
 
+}
+
+function send_response($status, $response, $message){
+    $response['status'] = $status;
+    $response['message'] = $message;
+    header("HTTP/1.1 ". $response['status'].": ". $response['message']."");
+    echo json_encode($response);
+    return;
 }

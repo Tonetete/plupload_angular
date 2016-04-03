@@ -13,6 +13,7 @@ angular.module('puploadAngularApp')
     $scope.filesUploads = [];
     $scope.filesUploaded = [];
     $scope.succesUpdated = false;
+    $scope.notFilesUploaded = false;
     $scope.uploader = new plupload.Uploader({
      runtimes : 'html5,flash,silverlight,html4',
      browse_button : 'pickfiles', // you can pass an id...
@@ -101,6 +102,7 @@ angular.module('puploadAngularApp')
          file.processingFile = false;
          file.complete = true;
          $scope.filesUploaded.push(response.response.row);
+         $scope.notFilesUploaded = false;
          $scope.$apply();
        },
 
@@ -114,7 +116,7 @@ angular.module('puploadAngularApp')
          console.log(err.file.name+" showError: "+err.file.showError);
          console.log("Error Plupload code#" + err.code + ": " + err.message);
          console.log("Error with file: "+err.file.name);
-         console.log("Response from the server: "+err.response+" with status: "+err.status);
+         console.log("Response from the server: "+err.response.message+" with status: "+err.status);
          console.log("Response headers: "+err.responseHeaders);
        }
      }
@@ -182,29 +184,30 @@ angular.module('puploadAngularApp')
 
    };
 
-   /*$scope.updateNameFile = function(id, data){
-     var file = uploadFactory.getFiles().get({id: id});
-     file.name = data;
-     file.$update(); //PUT
-
-     $http.put("http://localhost/uploads/upload/"+id, data)
-        .success(function(res){
-            console.log("Got put method " + res);
-      });
-   }*/
 
    $scope.uploader.init();
 
    // initial load
    $scope.init = function(){
-     $scope.filesUploaded = uploadFactory.getFiles().query();
+     uploadFactory.getFiles().query().$promise
+     .then(function(response){
+            $scope.notFilesUploaded = false;
+            $scope.filesUploaded = response;
+            console.log(response);
+          },
+          function(error){
+            if(error.status === 404){
+              $scope.notFilesUploaded = true;
+            }
+            console.log(error);
+          });
    }
 
    $scope.init();
 
   }])
-  .filter('trusted', ['$sce', function ($sce) {
+  /*.filter('trusted', ['$sce', function ($sce) {
     return function(url) {
         return $sce.trustAsResourceUrl(url);
     };
-  }]);;
+  }]);*/;
