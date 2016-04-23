@@ -148,14 +148,16 @@ angular.module('puploadAngularApp')
        }
      );
 
-   }
+   };
 
    Array.prototype.indexOfObject = function arrayObjectIndexOf(property, value) {
     for (var i = 0, len = this.length; i < len; i++) {
-        if (this[i][property] === value) return i;
+        if (this[i][property] === value){
+          return i;
+        }
      }
      return -1;
-   }
+   };
 
    /**
     * @ngdoc function
@@ -201,7 +203,7 @@ angular.module('puploadAngularApp')
             }
             console.log(error);
           });
-   }
+   };
 
    $scope.init();
 

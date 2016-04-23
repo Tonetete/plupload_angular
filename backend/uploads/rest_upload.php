@@ -9,7 +9,7 @@
 require_once('mongo-connection.php');
 
 // Turning OFF php report, comment below to debug purposes.
-error_reporting(0);
+error_reporting(E_ALL);
 @ini_set('display_errors', 0);
 
 if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] == 'http://localhost:9000') {
@@ -37,7 +37,7 @@ header("Content-Type: application/json");
 
 
 // Set target dir
-$target_dir = "/Users/Tone/www/uploads/files/";
+$target_dir = $_SERVER[DOCUMENT_ROOT]."/uploads/files/";
 
 //Set connection
 $connection = new MongoConnection();
@@ -165,9 +165,9 @@ function postRequest(){
     global $target_dir;
     $target_file = $target_dir . $fileName;
     $uploadOk = 1;
+    $errorUploadFile = "";
 
-
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
+    if ($errorUploadFile = move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
         $url = ($_SERVER['SERVER_NAME']==='localhost') ? 'http://localhost/uploads/files/' : $_SERVER['SERVER_NAME'];
         $url = $url . $fileName;
         $datas = array(
