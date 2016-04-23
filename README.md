@@ -1,3 +1,7 @@
+# plupload_angular
+
+A fancy uploader developed with angularjs and plupload.
+
 
 For issues with max file size allowed in PHP, edit the php.ini file and set directive upload_max_filesize whatever the value you want to.
 
