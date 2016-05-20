@@ -1,6 +1,6 @@
 # plupload_angular
 
-`A fancy uploader developed with angularjs and plupload.`
+A fancy uploader developed with angularjs and plupload.
 
 This project is about a file uploader made with AngularJS as the front-end and PHP & MongoDB for the backend and logic data respectively.
 
@@ -13,9 +13,9 @@ This project is about a file uploader made with AngularJS as the front-end and P
 
 1. Run `grunt server`in project folder.
 2. Run your mongod instance with `mongod`
-3. Move `rest_upload.php`and `mongo-connection.php`to an folder called `upload` inside your www folder.
+3. Move `rest_upload.php`and `mongo-connection.php`to a folder called `upload` inside your www folder.
 4. Run your web server.
-5. Access `http://localhost:9000``
+5. Access `http://localhost:9000`
 6. Enjoy!
 
 For more info about this project you can refer to my blog site, in spanish: http://www.laguaridadetone.com/gestor-de-descargas-con-angularjs-y-servicios-rest-1o-creando-la-vista-con-angularjs/
